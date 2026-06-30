@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Python Developer Energy Drink - Cinematic Experience</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Manrope:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#6e727a",
+                        "outline-variant": "#41474f",
+                        "primary-container": "#3776ab",
+                        "secondary-fixed": "#ffe082",
+                        "surface-tint": "#98cbff",
+                        "on-tertiary-container": "#f6f8ff",
+                        "on-tertiary": "#2d3137",
+                        "on-error-container": "#ffdad6",
+                        "background": "#111415",
+                        "secondary-fixed-dim": "#ecc228",
+                        "on-secondary-fixed-variant": "#564500",
+                        "on-secondary": "#3c2f00",
+                        "on-primary-fixed-variant": "#004a77",
+                        "on-primary": "#003354",
+                        "inverse-surface": "#e1e3e4",
+                        "surface-dim": "#111415",
+                        "secondary-container": "#d1aa00",
+                        "surface-container-high": "#282a2b",
+                        "error-container": "#93000a",
+                        "on-background": "#e1e3e4",
+                        "primary-fixed-dim": "#98cbff",
+                        "surface-container-highest": "#323536",
+                        "primary-fixed": "#cfe5ff",
+                        "surface": "#111415",
+                        "on-error": "#690005",
+                        "primary": "#98cbff",
+                        "on-surface": "#e1e3e4",
+                        "tertiary-fixed-dim": "#c3c6cf",
+                        "on-primary-container": "#f5f8ff",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#1d6296",
+                        "surface-container-low": "#191c1d",
+                        "on-secondary-container": "#504000",
+                        "secondary": "#efc52b",
+                        "on-primary-fixed": "#001d33",
+                        "surface-container": "#1d2021",
+                        "surface-variant": "#323536",
+                        "tertiary": "#c3c6cf",
+                        "inverse-on-surface": "#2e3132",
+                        "surface-container-lowest": "#0c0f10",
+                        "on-tertiary-fixed-variant": "#43474e",
+                        "on-surface-variant": "#c1c7d0",
+                        "on-secondary-fixed": "#231b00",
+                        "outline": "#8b919a",
+                        "tertiary-fixed": "#dfe2eb",
+                        "on-tertiary-fixed": "#181c22",
+                        "surface-bright": "#373a3b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "margin-mobile": "20px",
+                        "margin-desktop": "64px",
+                        "gutter": "24px",
+                        "unit": "8px",
+                        "section-gap": "120px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Sora"],
+                        "body-md": ["Manrope"],
+                        "code-sm": ["JetBrains Mono"],
+                        "display-lg": ["Sora"],
+                        "headline-lg-mobile": ["Sora"],
+                        "label-caps": ["Sora"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "code-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "display-lg": ["72px", { "lineHeight": "80px", "letterSpacing": "-0.04em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.15em", "fontWeight": "800" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        .glass-panel {
+            background: rgba(17, 20, 21, 0.15);
+            backdrop-filter: blur(24px);
+            border: 0.5px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .ambient-glow {
+            box-shadow: 0 0 60px rgba(55, 118, 171, 0.15);
+        }
+
+        .ambient-glow-yellow {
+            box-shadow: 0 0 60px rgba(239, 197, 43, 0.15);
+        }
+
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .metallic-text {
+            background: linear-gradient(to bottom right, #fff, #98cbff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation -->
+<nav class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-margin-desktop py-4 md:px-margin-desktop px-margin-mobile">
+<div class="glass-panel rounded-full mt-6 mx-auto w-[90%] max-w-container-max flex justify-between items-center px-6 py-3 border-[0.5px] border-white/15 shadow-[0_0_40px_rgba(55,118,171,0.15)] bg-surface/10 backdrop-blur-2xl">
+<div class="font-headline-lg text-headline-lg font-bold text-primary tracking-tighter">
+                Cinematic Doc
+            </div>
+<div class="hidden md:flex gap-8 items-center font-body-md text-body-md">
+<a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-3xl transition-all duration-300 px-4 py-2 rounded-full" href="#intro">Introduction</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-3xl transition-all duration-300 px-4 py-2 rounded-full text-primary border-b-2 border-secondary pb-1" href="#story">Story</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-3xl transition-all duration-300 px-4 py-2 rounded-full" href="#ingredients">Ingredients</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-3xl transition-all duration-300 px-4 py-2 rounded-full" href="#tech">Tech</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors hover:bg-white/5 hover:backdrop-blur-3xl transition-all duration-300 px-4 py-2 rounded-full" href="#creator">Creator</a>
+</div>
+<button class="bg-primary-container text-on-primary-container font-code-sm text-code-sm px-6 py-2.5 rounded-full hover:bg-primary transition-colors duration-300 uppercase tracking-widest scale-95 active:scale-90 transition-transform hidden md:block">
+                Experience Now
+            </button>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
+<!-- STITCH_SHADER_START:ANIMATION_4 class="absolute inset-0 w-full h-full z-0 opacity-60" -->
+<div class="absolute inset-0 w-full h-full z-0 opacity-60" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_4" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_4');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+varying vec2 v_texCoord;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+
+float noise(vec2 p) {
+    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+void main() {
+    vec2 uv = v_texCoord;
+    vec2 mouse = u_mouse / u_resolution;
+    
+    // Base dark navy/black gradient
+    vec3 color = vec3(0.01, 0.02, 0.05);
+    
+    // Moving energy ribbons
+    for(float i = 1.0; i < 4.0; i++) {
+        float speed = u_time * 0.2 * i;
+        float y = sin(uv.x * 2.0 + speed) * 0.2 + 0.5;
+        float dist = abs(uv.y - y);
+        float glow = 0.02 / (dist + 0.01);
+        
+        vec3 ribbonColor = (mod(i, 2.0) == 0.0) ? vec3(0.22, 0.46, 0.67) : vec3(1.0, 0.83, 0.23); // Python Blue / Yellow
+        color += ribbonColor * glow * 0.5;
+    }
+    
+    // Subtle digital particles
+    float n = noise(uv + u_time * 0.05);
+    if(n > 0.995) {
+        color += vec3(1.0) * 0.8;
+    }
+    
+    // Mouse reaction
+    float mDist = distance(uv, mouse);
+    color += vec3(0.2, 0.3, 0.5) * (1.0 / (mDist * 10.0 + 1.0)) * 0.3;
+
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_4 -->
+<div class="absolute inset-0 z-10 flex items-center justify-center mix-blend-screen pointer-events-none">
+<div class="w-[800px] h-[800px] bg-primary-container rounded-full blur-[120px] opacity-20"></div>
+</div>
+<div class="relative z-20 w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop flex flex-col items-center text-center mt-20">
+<h1 class="font-display-lg text-display-lg md:text-[120px] metallic-text font-extrabold tracking-tighter mb-4 reveal-up" style="line-height: 1.1;">
+                PYTHON DEVELOPER
+            </h1>
+<p class="font-code-sm text-code-sm md:text-xl text-secondary uppercase tracking-[0.2em] mb-12 reveal-up" style="transition-delay: 0.1s;">
+                Fuel Your Code. Power Your Future.
+            </p>
+<div class="relative w-full max-w-[400px] aspect-[1/2] mx-auto reveal-up ambient-glow rounded-3xl" style="transition-delay: 0.3s;">
+<!-- STITCH_THREEJS_START:ANIMATION_3 class="absolute inset-0 w-full h-full rounded-3xl" -->
+<div class="absolute inset-0 w-full h-full rounded-3xl" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_3" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_3');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const width = container.clientWidth || window.innerWidth;
+const height = container.clientHeight || window.innerHeight;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+camera.position.z = 5;
+
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+renderer.setSize(width, height);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+container.appendChild(renderer.domElement);
+
+// Lighting
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambientLight);
+
+const pointLight = new THREE.PointLight(0x3776ab, 15); // Python Blue
+pointLight.position.set(5, 5, 5);
+scene.add(pointLight);
+
+const yellowLight = new THREE.PointLight(0xffd43b, 10); // Python Yellow
+yellowLight.position.set(-5, -2, 2);
+scene.add(yellowLight);
+
+// Creating the Can (Simplified Cylinder with Python Brand Colors)
+const geometry = new THREE.CylinderGeometry(1, 1, 3, 32);
+const material = new THREE.MeshPhongMaterial({
+    color: 0xffffff,
+    shininess: 100,
+    specular: 0x3776ab
+});
+const can = new THREE.Mesh(geometry, material);
+scene.add(can);
+
+// Floating Animation
+let time = 0;
+function animate() {
+    requestAnimationFrame(animate);
+    time += 0.01;
+    
+    can.rotation.y += 0.01;
+    can.position.y = Math.sin(time) * 0.1;
+    
+    // Mouse interaction
+    const targetX = (window.mouseX || 0) * 0.2;
+    const targetY = (window.mouseY || 0) * 0.2;
+    can.rotation.x += (targetY - can.rotation.x) * 0.05;
+    can.rotation.z += (targetX - can.rotation.z) * 0.05;
+
+    renderer.render(scene, camera);
+}
+
+window.addEventListener('mousemove', (e) => {
+    window.mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+    window.mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+});
+
+window.addEventListener('resize', () => {
+    const w = container.clientWidth || window.innerWidth;
+    const h = container.clientHeight || window.innerHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+});
+
+animate();
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_3 -->
+</div>
+</div>
+<div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 flex flex-col items-center gap-2 reveal-up" style="transition-delay: 0.5s;">
+<span class="font-code-sm text-code-sm text-on-surface-variant uppercase tracking-widest text-[10px]">Scroll to explore</span>
+<span class="material-symbols-outlined bounce text-primary" data-icon="keyboard_arrow_down">keyboard_arrow_down</span>
+</div>
+</header>
+<!-- Intro & Story -->
+<section class="relative py-section-gap w-full flex flex-col items-center justify-center min-h-screen" id="story">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full grid grid-cols-1 md:grid-cols-2 gap-gutter items-center">
+<div class="order-2 md:order-1 glass-panel rounded-3xl p-12 md:p-16 ambient-glow reveal-up">
+<span class="font-code-sm text-code-sm text-secondary bg-secondary/10 px-3 py-1 rounded-full uppercase tracking-widest mb-8 inline-block">The Origin</span>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-6 font-semibold">
+                    Brewed for Logic. <br/><span class="text-primary">Engineered for Performance.</span>
+</h2>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-8">
+                    In the quiet hours of compilation, when logic flows and systems architect themselves in the mind, energy is the vital resource. The Python Developer drink was conceptualized not as a beverage, but as an elegant dependency injected directly into your creative runtime.
+                </p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-[2px] bg-primary"></div>
+<span class="font-code-sm text-code-sm text-primary uppercase tracking-widest">Execute Excellence</span>
+</div>
+</div>
+<div class="order-1 md:order-2 relative h-[500px] rounded-3xl overflow-hidden glass-panel reveal-up" style="transition-delay: 0.2s;">
+<div class="bg-cover bg-center w-full h-full opacity-80 hover:opacity-100 transition-opacity duration-700" data-alt="A highly detailed, cinematic macro shot of a frosted aluminum can in a dark, high-tech environment. The can features bold yellow and blue graphic elements reminiscent of code syntax. Condensation beads glisten perfectly under dramatic, cool blue studio lighting, creating a premium, refreshing mood. The background is deep black with subtle, out-of-focus digital glowing data streams." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC1i1O7wvam_DDAykYOSltZogcoXcFayh7jRkWGV307SS_d2vMz21sCfMp-iIlAMzV8hUGCiDuLUA2YHzJ3jqJ8yw1RuvAfJZzOpvxUWJfhn318ZSFl2uXwB7Z677Mj9q16bG4QHRe0IFS33P37AVscVB53Xyz6nu3LB8DY6DTA-3wsNX_WbNrm4trH171XpITgTP0UI1Ps4BDCEWWU9ltH3HiH5WzGKFqVT3fAQCAIqI1RvhmuC5E6f-CYbV-dJYs_wN4bMouqCLE')"></div>
+</div>
+</div>
+</section>
+<!-- Ingredients -->
+<section class="relative py-section-gap w-full bg-surface-container-low" id="ingredients">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full text-center mb-24 reveal-up">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface font-semibold mb-4">Proprietary Formulation</h2>
+<p class="font-code-sm text-code-sm text-on-surface-variant uppercase tracking-widest">Active Components // Runtime Resources</p>
+</div>
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Ingredient 1 -->
+<div class="glass-panel rounded-3xl p-8 reveal-up flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-500">
+<div class="w-24 h-24 rounded-full bg-primary-container/20 flex items-center justify-center mb-8 group-hover:ambient-glow transition-all duration-500">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="bolt">bolt</span>
+</div>
+<h3 class="font-headline-lg text-[24px] font-semibold text-on-surface mb-3">Syntax Sugar</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Pure, unadulterated focus extract. Smooths out complex problem solving and makes long coding sessions palatable.</p>
+<div class="mt-6 w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-3/4"></div>
+</div>
+</div>
+<!-- Ingredient 2 -->
+<div class="glass-panel rounded-3xl p-8 reveal-up flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-500" style="transition-delay: 0.1s;">
+<div class="w-24 h-24 rounded-full bg-secondary/20 flex items-center justify-center mb-8 group-hover:ambient-glow-yellow transition-all duration-500">
+<span class="material-symbols-outlined text-4xl text-secondary" data-icon="memory">memory</span>
+</div>
+<h3 class="font-headline-lg text-[24px] font-semibold text-on-surface mb-3">Logical Boost</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Enhanced cognitive routing. Accelerates mental compilation times and optimizes algorithmic thinking.</p>
+<div class="mt-6 w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-full"></div>
+</div>
+</div>
+<!-- Ingredient 3 -->
+<div class="glass-panel rounded-3xl p-8 reveal-up flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-500" style="transition-delay: 0.2s;">
+<div class="w-24 h-24 rounded-full bg-tertiary-container/20 flex items-center justify-center mb-8 hover:shadow-[0_0_40px_rgba(195,198,207,0.15)] transition-all duration-500">
+<span class="material-symbols-outlined text-4xl text-tertiary" data-icon="shield">shield</span>
+</div>
+<h3 class="font-headline-lg text-[24px] font-semibold text-on-surface mb-3">Runtime Resilience</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Stress-tested electrolytes to prevent midnight crashes and handle infinite loops without fatigue.</p>
+<div class="mt-6 w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-5/6"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Packaging & Tech -->
+<section class="relative py-section-gap w-full overflow-hidden" id="tech">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="reveal-up relative aspect-square rounded-full flex items-center justify-center">
+<div class="absolute inset-0 bg-primary/5 rounded-full blur-[100px]"></div>
+<div class="relative z-10 w-full h-full glass-panel rounded-[40px] overflow-hidden p-8 flex items-center justify-center ambient-glow">
+<img class="w-full h-full object-contain mix-blend-screen opacity-70" data-alt="A stylized technical schematic diagram of a beverage can, rendered in thin, precise white and blue lines on a dark background. The diagram points to specific features like 'Brushed Aluminum Finish' and 'Thermal Retention Layer' using engineering-style callouts. The aesthetic is clean, minimalist, and highly technical, resembling a blueprint for a piece of advanced hardware." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9myoT5S5zVyeznhlO81WvUqBCFU6zJvGQnt9PEG1Sd0IS50SBTNiosrSG7PR9PtNNdOtDwB4QrzhW5CY8ClZRa0lM5QQ4UFxJ4_MM37VKEEI3SBzcttNYRwgDvwUkNGrcPzyX02__swxHg7AoIcoRZUoJNNbixhxCSMoL1cpFUIdTXL3YHYr3EqjR5J1tOVR8Vqw12o31_LUTAINneegcUJYerCw0VuL5uhs7kQkjlxvlU0B-F-o35Z18yC0IhKpsRGMzqIl0Sl8"/>
+</div>
+</div>
+<div class="flex flex-col gap-8">
+<div class="reveal-up">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface font-semibold mb-6">Hardware Specifications</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8">
+                        The vessel is as critical as the payload. Encased in a brushed aluminum chassis, engineered for maximum thermal retention, ensuring your energy payload remains at optimal operating temperatures.
+                    </p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="glass-panel p-6 rounded-2xl reveal-up" style="transition-delay: 0.1s;">
+<span class="font-code-sm text-code-sm text-secondary uppercase mb-2 block">Material</span>
+<div class="font-headline-lg text-[20px] text-on-surface">Anodized Al</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl reveal-up" style="transition-delay: 0.2s;">
+<span class="font-code-sm text-code-sm text-primary uppercase mb-2 block">Finish</span>
+<div class="font-headline-lg text-[20px] text-on-surface">Matte Grip</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl reveal-up" style="transition-delay: 0.3s;">
+<span class="font-code-sm text-code-sm text-secondary uppercase mb-2 block">Capacity</span>
+<div class="font-headline-lg text-[20px] text-on-surface">355ml / 12oz</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl reveal-up" style="transition-delay: 0.4s;">
+<span class="font-code-sm text-code-sm text-primary uppercase mb-2 block">Protocol</span>
+<div class="font-headline-lg text-[20px] text-on-surface">TCP/Sip</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Creator Section -->
+<section class="relative py-section-gap w-full bg-surface-container-lowest border-t border-white/5" id="creator">
+<div class="max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop text-center reveal-up">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface font-semibold mb-8">Meet the Creator</h2>
+<div class="glass-panel rounded-3xl p-10 md:p-16 ambient-glow">
+<p class="font-body-md text-xl md:text-2xl text-on-surface-variant leading-relaxed mb-12 italic font-light">
+                    "This project was created as a tribute to developers, creativity, and the limitless possibilities of imagination. Code is poetry, and sometimes, poetry needs a jolt of energy."
+                </p>
+<div class="flex flex-col items-center justify-center gap-4">
+<div class="font-code-sm text-code-sm text-primary tracking-widest uppercase">Created by Ro</div>
+<div class="text-4xl text-secondary mt-4 signature-font">With Love, RO 🫶🏻</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full py-section-gap bg-background flex flex-col items-center justify-center gap-gutter px-margin-desktop bg-surface-container-lowest">
+<div class="font-label-caps text-label-caps text-on-surface mb-4">
+            Created with ❤️ by Ro
+        </div>
+<div class="flex gap-8 font-body-md text-body-md font-label-caps text-label-caps text-outline">
+<a class="hover:text-primary transition-colors duration-200 opacity-80 hover:opacity-100" href="#">Tribute</a>
+<a class="hover:text-primary transition-colors duration-200 opacity-80 hover:opacity-100" href="#">Privacy</a>
+<a class="hover:text-primary transition-colors duration-200 opacity-80 hover:opacity-100" href="#">Terms</a>
+</div>
+</footer>
+<script>
+        // Simple Intersection Observer for reveal animations
+        document.addEventListener("DOMContentLoaded", () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal-up').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body></html>
