@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Animation</title>
+    <link rel="stylesheet" href="style.css">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Manrope:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#6e727a",
+                        "outline-variant": "#41474f",
+                        "primary-container": "#3776ab",
+                        "secondary-fixed": "#ffe082",
+                        "surface-tint": "#98cbff",
+                        "on-tertiary-container": "#f6f8ff",
+                        "on-tertiary": "#2d3137",
+                        "on-error-container": "#ffdad6",
+                        "background": "#111415",
+                        "secondary-fixed-dim": "#ecc228",
+                        "on-secondary-fixed-variant": "#564500",
+                        "on-secondary": "#3c2f00",
+                        "on-primary-fixed-variant": "#004a77",
+                        "on-primary": "#003354",
+                        "inverse-surface": "#e1e3e4",
+                        "surface-dim": "#111415",
+                        "secondary-container": "#d1aa00",
+                        "surface-container-high": "#282a2b",
+                        "error-container": "#93000a",
+                        "on-background": "#e1e3e4",
+                        "primary-fixed-dim": "#98cbff",
+                        "surface-container-highest": "#323536",
+                        "primary-fixed": "#cfe5ff",
+                        "surface": "#111415",
+                        "on-error": "#690005",
+                        "primary": "#98cbff",
+                        "on-surface": "#e1e3e4",
+                        "tertiary-fixed-dim": "#c3c6cf",
+                        "on-primary-container": "#f5f8ff",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#1d6296",
+                        "surface-container-low": "#191c1d",
+                        "on-secondary-container": "#504000",
+                        "secondary": "#efc52b",
+                        "on-primary-fixed": "#001d33",
+                        "surface-container": "#1d2021",
+                        "surface-variant": "#323536",
+                        "tertiary": "#c3c6cf",
+                        "inverse-on-surface": "#2e3132",
+                        "surface-container-lowest": "#0c0f10",
+                        "on-tertiary-fixed-variant": "#43474e",
+                        "on-surface-variant": "#c1c7d0",
+                        "on-secondary-fixed": "#231b00",
+                        "outline": "#8b919a",
+                        "tertiary-fixed": "#dfe2eb",
+                        "on-tertiary-fixed": "#181c22",
+                        "surface-bright": "#373a3b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "margin-mobile": "20px",
+                        "margin-desktop": "64px",
+                        "gutter": "24px",
+                        "unit": "8px",
+                        "section-gap": "120px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Sora"],
+                        "body-md": ["Manrope"],
+                        "code-sm": ["JetBrains Mono"],
+                        "display-lg": ["Sora"],
+                        "headline-lg-mobile": ["Sora"],
+                        "label-caps": ["Sora"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "code-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "display-lg": ["72px", { "lineHeight": "80px", "letterSpacing": "-0.04em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.15em", "fontWeight": "800" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        .glass-panel {
+            background: rgba(17, 20, 21, 0.15);
+            backdrop-filter: blur(24px);
+            border: 0.5px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .ambient-glow {
+            box-shadow: 0 0 60px rgba(55, 118, 171, 0.15);
+        }
+
+        .ambient-glow-yellow {
+            box-shadow: 0 0 60px rgba(239, 197, 43, 0.15);
+        }
+
+        .reveal-up {
+            opacity: 1; /* Changed from 0 to 1 as a fail-safe */
+            transform: translateY(40px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .metallic-text {
+            background: linear-gradient(to bottom right, #fff, #98cbff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Hide scrollbar for nav */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-primary-container selection:text-on-primary-container">
+
+    <div class="fixed inset-0 w-full h-full z-[-1] opacity-60 pointer-events-none" id="global-bg-container">
+        <canvas id="shader-canvas-global" style="display:block;width:100%;height:100%"></canvas>
+        <script>
+        (function() {
+          const canvas = document.getElementById('shader-canvas-global');
+          function syncSize() {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            if (canvas.width !== w || canvas.height !== h) {
+              canvas.width  = w;
+              canvas.height = h;
+            }
+          }
+          window.addEventListener('resize', syncSize);
+          syncSize();
+
+          const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+          if (!gl) return;
+          const vs = `attribute vec2 a_position;
+          varying vec2 v_texCoord;
+          void main() {
+            v_texCoord = a_position * 0.5 + 0.5;
+            gl_Position = vec4(a_position, 0.0, 1.0);
+          }`;
+          const fs = `precision highp float;
+          varying vec2 v_texCoord;
+          uniform float u_time;
+          uniform vec2 u_resolution;
+          uniform vec2 u_mouse;
+          float noise(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+          void main() {
+              vec2 uv = v_texCoord;
+              vec2 mouse = u_mouse / u_resolution;
+              vec3 color = vec3(0.01, 0.02, 0.05);
+              for(float i = 1.0; i < 4.0; i++) {
+                  float speed = u_time * 0.2 * i;
+                  float y = sin(uv.x * 2.0 + speed) * 0.2 + 0.5;
+                  float dist = abs(uv.y - y);
+                  float glow = 0.02 / (dist + 0.01);
+                  vec3 ribbonColor = (mod(i, 2.0) == 0.0) ? vec3(0.22, 0.46, 0.67) : vec3(1.0, 0.83, 0.23); 
+                  color += ribbonColor * glow * 0.5;
+              }
+              float n = noise(uv + u_time * 0.05);
+              if(n > 0.995) { color += vec3(1.0) * 0.8; }
+              float mDist = distance(uv, mouse);
+              color += vec3(0.2, 0.3, 0.5) * (1.0 / (mDist * 10.0 + 1.0)) * 0.3;
+              gl_FragColor = vec4(color, 1.0);
+          }`;
+          function cs(type, src) {
+            const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s;
+          }
+          const prog = gl.createProgram();
+          gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs)); gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+          gl.linkProgram(prog); gl.useProgram(prog);
+          const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+          const pos = gl.getAttribLocation(prog, 'a_position'); gl.enableVertexAttribArray(pos);
+          gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+          const uTime = gl.getUniformLocation(prog, 'u_time');
+          const uRes = gl.getUniformLocation(prog, 'u_resolution');
+          const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+          let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+          window.addEventListener('mousemove', (event) => { mouse.x = event.clientX; mouse.y = window.innerHeight - event.clientY; });
+          function render(t) {
+            gl.viewport(0, 0, canvas.width, canvas.height);
+            if (uTime) gl.uniform1f(uTime, t * 0.001);
+            if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+            if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+            requestAnimationFrame(render);
+          }
+          render(0);
+        })();
+        </script>
+    </div>
+
+    <!-- Scroll Progress -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-[2px] bg-primary z-[60] w-0 shadow-[0_0_10px_rgba(152,203,255,1)] transition-all duration-75"></div>
+
+    <!-- Premium Navigation -->
+    <nav id="premium-nav" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-black/80 backdrop-blur-2xl px-4 md:px-8 py-2 md:py-4 rounded-full flex gap-4 md:gap-8 items-center shadow-2xl border border-white/20 transition-all duration-500 transform -translate-y-24 opacity-0 w-[95vw] md:w-auto max-w-max overflow-x-auto scrollbar-hide">
+        <a href="#intro-hero" class="nav-link font-code-sm text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300 whitespace-nowrap">Home</a>
+        <a href="#story" class="nav-link font-code-sm text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300 whitespace-nowrap">Origin</a>
+        <a href="#ingredients" class="nav-link font-code-sm text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300 whitespace-nowrap">Formulation</a>
+        <a href="#tech" class="nav-link font-code-sm text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300 whitespace-nowrap">Hardware</a>
+        <a href="#crafted" class="nav-link font-code-sm text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300 whitespace-nowrap">Crafted</a>
+        <a href="#inspiration" class="nav-link font-code-sm text-xs uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors duration-300 whitespace-nowrap">Inspiration</a>
+    </nav>
+
+    <!-- Intro Hero Screen -->
+    <div id="intro-hero" class="fixed inset-0 flex flex-col items-center justify-center z-40 pointer-events-none transition-all duration-[800ms] ease-out">
+        <h1 class="font-headline-lg text-4xl md:text-6xl lg:text-8xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-white to-primary tracking-tighter text-center animate-[breathe_4s_ease-in-out_infinite] drop-shadow-[0_0_25px_rgba(152,203,255,0.3)]">
+            PYTHON<br/>DEVELOPER
+        </h1>
+        <div class="absolute bottom-12 flex flex-col items-center gap-3 text-on-surface-variant animate-bounce opacity-80">
+            <span class="font-code-sm text-[10px] md:text-xs uppercase tracking-[0.3em]">Scroll to Begin</span>
+            <span class="material-symbols-outlined text-sm">arrow_downward</span>
+        </div>
+    </div>
+
+    <div class="scroll-container">
+        <div class="sticky-container">
+            <canvas id="scroll-canvas"></canvas>
+        </div>
+    </div>
+    
+    <!-- Intro & Story -->
+<section class="relative py-section-gap w-full flex flex-col items-center justify-center min-h-screen" id="story">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full grid grid-cols-1 md:grid-cols-2 gap-gutter items-center">
+<div class="order-2 md:order-1 glass-panel rounded-3xl p-12 md:p-16 ambient-glow reveal-up">
+<span class="font-code-sm text-code-sm text-secondary bg-secondary/10 px-3 py-1 rounded-full uppercase tracking-widest mb-8 inline-block">The Origin</span>
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-6 font-semibold">
+                    Brewed for Logic. <br/><span class="text-primary">Engineered for Performance.</span>
+</h2>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-8">
+                    In the quiet hours of compilation, when logic flows and systems architect themselves in the mind, energy is the vital resource. The Python Developer drink was conceptualized not as a beverage, but as an elegant dependency injected directly into your creative runtime.
+                </p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-[2px] bg-primary"></div>
+<span class="font-code-sm text-code-sm text-primary uppercase tracking-widest">Execute Excellence</span>
+</div>
+</div>
+<div class="order-1 md:order-2 relative h-[300px] md:h-[500px] rounded-3xl overflow-hidden glass-panel reveal-up" style="transition-delay: 0.2s;">
+<div class="bg-cover bg-center w-full h-full opacity-80 hover:opacity-100 transition-opacity duration-700" data-alt="A highly detailed, cinematic macro shot of a frosted aluminum can in a dark, high-tech environment. The can features bold yellow and blue graphic elements reminiscent of code syntax. Condensation beads glisten perfectly under dramatic, cool blue studio lighting, creating a premium, refreshing mood. The background is deep black with subtle, out-of-focus digital glowing data streams." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC1i1O7wvam_DDAykYOSltZogcoXcFayh7jRkWGV307SS_d2vMz21sCfMp-iIlAMzV8hUGCiDuLUA2YHzJ3jqJ8yw1RuvAfJZzOpvxUWJfhn318ZSFl2uXwB7Z677Mj9q16bG4QHRe0IFS33P37AVscVB53Xyz6nu3LB8DY6DTA-3wsNX_WbNrm4trH171XpITgTP0UI1Ps4BDCEWWU9ltH3HiH5WzGKFqVT3fAQCAIqI1RvhmuC5E6f-CYbV-dJYs_wN4bMouqCLE')"></div>
+</div>
+</div>
+</section>
+<!-- Ingredients -->
+<section class="relative py-section-gap w-full bg-transparent" id="ingredients">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full text-center mb-24 reveal-up">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface font-semibold mb-4">Proprietary Formulation</h2>
+<p class="font-code-sm text-code-sm text-on-surface-variant uppercase tracking-widest">Active Components // Runtime Resources</p>
+</div>
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Ingredient 1 -->
+<div class="glass-panel rounded-3xl p-8 reveal-up flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-500">
+<div class="w-24 h-24 rounded-full bg-primary-container/20 flex items-center justify-center mb-8 group-hover:ambient-glow transition-all duration-500">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="bolt">bolt</span>
+</div>
+<h3 class="font-headline-lg text-[24px] font-semibold text-on-surface mb-3">Syntax Sugar</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Pure, unadulterated focus extract. Smooths out complex problem solving and makes long coding sessions palatable.</p>
+<div class="mt-6 w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-3/4"></div>
+</div>
+</div>
+<!-- Ingredient 2 -->
+<div class="glass-panel rounded-3xl p-8 reveal-up flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-500" style="transition-delay: 0.1s;">
+<div class="w-24 h-24 rounded-full bg-secondary/20 flex items-center justify-center mb-8 group-hover:ambient-glow-yellow transition-all duration-500">
+<span class="material-symbols-outlined text-4xl text-secondary" data-icon="memory">memory</span>
+</div>
+<h3 class="font-headline-lg text-[24px] font-semibold text-on-surface mb-3">Logical Boost</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Enhanced cognitive routing. Accelerates mental compilation times and optimizes algorithmic thinking.</p>
+<div class="mt-6 w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-full"></div>
+</div>
+</div>
+<!-- Ingredient 3 -->
+<div class="glass-panel rounded-3xl p-8 reveal-up flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-500" style="transition-delay: 0.2s;">
+<div class="w-24 h-24 rounded-full bg-tertiary-container/20 flex items-center justify-center mb-8 hover:shadow-[0_0_40px_rgba(195,198,207,0.15)] transition-all duration-500">
+<span class="material-symbols-outlined text-4xl text-tertiary" data-icon="shield">shield</span>
+</div>
+<h3 class="font-headline-lg text-[24px] font-semibold text-on-surface mb-3">Runtime Resilience</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Stress-tested electrolytes to prevent midnight crashes and handle infinite loops without fatigue.</p>
+<div class="mt-6 w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-5/6"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Packaging & Tech -->
+<section class="relative py-section-gap w-full overflow-hidden" id="tech">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="reveal-up relative aspect-square rounded-full flex items-center justify-center">
+<div class="absolute inset-0 bg-primary/5 rounded-full blur-[100px]"></div>
+<div class="relative z-10 w-full h-full glass-panel rounded-[40px] overflow-hidden p-8 flex items-center justify-center ambient-glow">
+<img class="w-full h-full object-contain mix-blend-screen opacity-70" data-alt="A stylized technical schematic diagram of a beverage can, rendered in thin, precise white and blue lines on a dark background. The diagram points to specific features like 'Brushed Aluminum Finish' and 'Thermal Retention Layer' using engineering-style callouts. The aesthetic is clean, minimalist, and highly technical, resembling a blueprint for a piece of advanced hardware." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9myoT5S5zVyeznhlO81WvUqBCFU6zJvGQnt9PEG1Sd0IS50SBTNiosrSG7PR9PtNNdOtDwB4QrzhW5CY8ClZRa0lM5QQ4UFxJ4_MM37VKEEI3SBzcttNYRwgDvwUkNGrcPzyX02__swxHg7AoIcoRZUoJNNbixhxCSMoL1cpFUIdTXL3YHYr3EqjR5J1tOVR8Vqw12o31_LUTAINneegcUJYerCw0VuL5uhs7kQkjlxvlU0B-F-o35Z18yC0IhKpsRGMzqIl0Sl8"/>
+</div>
+</div>
+<div class="flex flex-col gap-8">
+<div class="reveal-up">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface font-semibold mb-6">Hardware Specifications</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8">
+                        The vessel is as critical as the payload. Encased in a brushed aluminum chassis, engineered for maximum thermal retention, ensuring your energy payload remains at optimal operating temperatures.
+                    </p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="glass-panel p-6 rounded-2xl reveal-up" style="transition-delay: 0.1s;">
+<span class="font-code-sm text-code-sm text-secondary uppercase mb-2 block">Material</span>
+<div class="font-headline-lg text-[20px] text-on-surface">Anodized Al</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl reveal-up" style="transition-delay: 0.2s;">
+<span class="font-code-sm text-code-sm text-primary uppercase mb-2 block">Finish</span>
+<div class="font-headline-lg text-[20px] text-on-surface">Matte Grip</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl reveal-up" style="transition-delay: 0.3s;">
+<span class="font-code-sm text-code-sm text-secondary uppercase mb-2 block">Capacity</span>
+<div class="font-headline-lg text-[20px] text-on-surface">355ml / 12oz</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl reveal-up" style="transition-delay: 0.4s;">
+<span class="font-code-sm text-code-sm text-primary uppercase mb-2 block">Protocol</span>
+<div class="font-headline-lg text-[20px] text-on-surface">TCP/Sip</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Crafted With Passion -->
+<section class="relative py-section-gap w-full bg-transparent" id="crafted">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full text-center mb-24 reveal-up">
+        <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface font-semibold mb-4">Crafted With Passion</h2>
+        <p class="font-code-sm text-code-sm text-on-surface-variant uppercase tracking-widest">The Architecture of Energy</p>
+    </div>
+    
+    <div class="max-w-4xl mx-auto px-margin-mobile md:px-margin-desktop relative">
+        <!-- Timeline line -->
+        <div class="absolute left-[39px] md:left-1/2 top-0 bottom-0 w-1 bg-surface-variant/50 transform md:-translate-x-1/2 rounded-full hidden sm:block"></div>
+        
+        <!-- Timeline Item 1 -->
+        <div class="relative flex flex-col md:flex-row items-center justify-between mb-16 reveal-up group">
+            <div class="w-full md:w-5/12 text-left md:text-right mb-6 md:mb-0 order-2 md:order-1">
+                <h3 class="font-headline-lg text-2xl font-semibold text-primary mb-2">01. Requirement Gathering</h3>
+                <p class="font-body-md text-on-surface-variant">Before the first drop was synthesized, we analyzed the critical dependencies of a developer's workflow: focus, endurance, and flow state.</p>
+            </div>
+            <div class="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full glass-panel flex items-center justify-center z-10 group-hover:ambient-glow transition-all duration-500 order-1 hidden sm:flex">
+                <span class="material-symbols-outlined text-primary">psychology</span>
+            </div>
+            <div class="w-full md:w-5/12 order-3"></div>
+        </div>
+
+        <!-- Timeline Item 2 -->
+        <div class="relative flex flex-col md:flex-row items-center justify-between mb-16 reveal-up group">
+            <div class="w-full md:w-5/12 order-2 md:order-1"></div>
+            <div class="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full glass-panel flex items-center justify-center z-10 group-hover:ambient-glow-yellow transition-all duration-500 order-1 hidden sm:flex">
+                <span class="material-symbols-outlined text-secondary">science</span>
+            </div>
+            <div class="w-full md:w-5/12 text-left mb-6 md:mb-0 order-3">
+                <h3 class="font-headline-lg text-2xl font-semibold text-secondary mb-2">02. Synthesizing the Core</h3>
+                <p class="font-body-md text-on-surface-variant">We architected a proprietary blend of nootropics and clean caffeine. It's not just energy; it's a meticulously compiled formula for your brain.</p>
+            </div>
+        </div>
+
+        <!-- Timeline Item 3 -->
+        <div class="relative flex flex-col md:flex-row items-center justify-between reveal-up group">
+            <div class="w-full md:w-5/12 text-left md:text-right mb-6 md:mb-0 order-2 md:order-1">
+                <h3 class="font-headline-lg text-2xl font-semibold text-primary mb-2">03. Refactoring Taste</h3>
+                <p class="font-body-md text-on-surface-variant">A premium fuel requires a premium UX. We iterated over hundreds of flavor profiles to achieve a crisp, refreshing taste that never causes a crash.</p>
+            </div>
+            <div class="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full glass-panel flex items-center justify-center z-10 group-hover:ambient-glow transition-all duration-500 order-1 hidden sm:flex">
+                <span class="material-symbols-outlined text-primary">done_all</span>
+            </div>
+            <div class="w-full md:w-5/12 order-3"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Developer Inspiration -->
+<section class="relative py-section-gap w-full bg-transparent overflow-hidden" id="inspiration">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        
+        <!-- Terminal UI -->
+        <div class="reveal-up order-2 lg:order-1">
+            <div class="glass-panel rounded-2xl overflow-hidden ambient-glow shadow-2xl border-[0.5px] border-white/20">
+                <!-- Terminal Header -->
+                <div class="bg-black/40 px-4 py-3 border-b border-white/10 flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    <span class="ml-4 font-code-sm text-xs text-on-surface-variant">developer_mindset.py</span>
+                </div>
+                <!-- Terminal Body -->
+                <div class="p-6 font-code-sm text-sm md:text-base leading-relaxed bg-black/60 min-h-[250px] relative">
+                    <pre class="m-0"><code id="typewriter-code" class="text-white/90"></code><span class="animate-pulse inline-block w-2 h-5 bg-primary ml-1 align-middle" id="typewriter-cursor"></span></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quote Grid -->
+        <div class="order-1 lg:order-2 reveal-up">
+            <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface font-semibold mb-6">Fuel for the Mind</h2>
+            <p class="font-body-md text-body-md text-on-surface-variant mb-10">
+                Energy isn't just physical. True greatness is compiled through consistency, curiosity, and an unwavering passion for building the future.
+            </p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="glass-panel p-5 rounded-xl hover:-translate-y-1 transition-transform duration-300">
+                    <p class="font-body-md italic text-on-surface">"Every bug teaches something."</p>
+                </div>
+                <div class="glass-panel p-5 rounded-xl hover:-translate-y-1 transition-transform duration-300 sm:translate-y-4">
+                    <p class="font-body-md italic text-primary">"Small commits build legendary products."</p>
+                </div>
+                <div class="glass-panel p-5 rounded-xl hover:-translate-y-1 transition-transform duration-300">
+                    <p class="font-body-md italic text-on-surface">"Code today. Inspire tomorrow."</p>
+                </div>
+                <div class="glass-panel p-5 rounded-xl hover:-translate-y-1 transition-transform duration-300 sm:translate-y-4">
+                    <p class="font-body-md italic text-secondary">"Consistency compiles success."</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- Floating Particles for this section -->
+    <div class="absolute inset-0 pointer-events-none z-[-1] overflow-hidden">
+        <div class="particle absolute w-1 h-1 bg-primary rounded-full blur-[1px] top-1/4 left-1/4 animate-[float_8s_infinite]"></div>
+        <div class="particle absolute w-2 h-2 bg-secondary rounded-full blur-[2px] top-3/4 left-1/3 animate-[float_12s_infinite_reverse]"></div>
+        <div class="particle absolute w-1.5 h-1.5 bg-primary rounded-full blur-[1px] top-1/2 right-1/4 animate-[float_10s_infinite]"></div>
+        <div class="particle absolute w-1 h-1 bg-white rounded-full blur-[1px] top-1/3 right-1/3 animate-[float_9s_infinite_reverse]"></div>
+    </div>
+</section>
+
+
+<!-- Cinematic Footer: Meet the Creator -->
+<footer id="cinematic-footer" class="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden py-32 mt-32">
+    <!-- Ambient Background Effects -->
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-black z-0"></div>
+    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/20 blur-[120px] rounded-full z-0 pointer-events-none opacity-50 footer-glow"></div>
+    
+    <!-- Floating CSS Particles (Simplified) -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-1/4 left-1/4 w-2 h-2 rounded-full bg-white/40 blur-[1px] animate-pulse"></div>
+        <div class="absolute top-1/3 right-1/3 w-3 h-3 rounded-full bg-primary/40 blur-[2px] animate-bounce"></div>
+        <div class="absolute bottom-1/4 left-1/3 w-1 h-1 rounded-full bg-white/60 blur-[1px] animate-ping"></div>
+    </div>
+
+    <!-- Main Footer Content Container -->
+    <div class="relative z-10 w-full max-w-5xl mx-auto px-6 md:px-12 flex flex-col items-center text-center">
+        
+        <h2 class="gsap-footer-item font-display text-5xl md:text-7xl lg:text-8xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-primary to-white mb-6 opacity-0 translate-y-10">
+            Meet the Creator
+        </h2>
+        
+        <p class="gsap-footer-item font-body text-lg md:text-xl text-on-surface-variant max-w-2xl mb-16 opacity-0 translate-y-10">
+            Made with ❤️ and countless lines of code by Ro 🫶🏻
+        </p>
+
+        <!-- Glassmorphism Creator Card -->
+        <div class="gsap-footer-item glass-panel w-full max-w-2xl p-8 md:p-12 rounded-[2rem] border border-white/10 shadow-2xl relative overflow-hidden group opacity-0 translate-y-10">
+            <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+            
+            <div class="relative z-10 flex flex-col items-center">
+                <!-- Avatar / Logo Glow placeholder -->
+                <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-primary to-black p-[2px] mb-6 shadow-[0_0_30px_rgba(152,203,255,0.3)]">
+                    <div class="w-full h-full rounded-full bg-black flex items-center justify-center font-display text-3xl text-white tracking-widest">
+                        Ro
+                    </div>
+                </div>
+                
+                <h3 class="font-display text-3xl md:text-4xl text-white mb-2">Rohit</h3>
+                <p class="font-code text-primary/80 text-sm tracking-widest uppercase mb-8">Creative Developer</p>
+                
+                <div class="flex gap-6 mb-8 flex-wrap justify-center">
+                    <!-- LinkedIn -->
+                    <a href="https://linkedin.com/in/rohit-kumar-mishra-28284537b" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black hover:border-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)]">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    </a>
+                    <!-- X (Twitter) -->
+                    <a href="https://x.com/___rohit_05___" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black hover:border-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)]">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
+                    </a>
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/i.m_ro_05?igsh=Y3B5eTl4aG0xODIw" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black hover:border-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)]">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <!-- GitHub -->
+                    <a href="https://github.com/rohitmishra05/" target="_blank" rel="noopener noreferrer" class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black hover:border-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_20px_rgba(255,255,255,0.5)]">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    </a>
+                </div>
+                
+                <div class="font-code text-lg text-white/90">
+                    Made with <span class="text-primary animate-pulse inline-block">💙</span> by Ro
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom Links -->
+        <div class="gsap-footer-item w-full flex flex-col md:flex-row justify-between items-center mt-24 border-t border-white/10 pt-8 opacity-0 translate-y-10">
+            <p class="font-code-sm text-xs text-white/50 mb-4 md:mb-0"><span id="copyright-year">2026</span> Python Developer Energy Drink. All rights reserved.</p>
+            <div class="flex gap-8 font-code-sm text-xs text-white/70 uppercase tracking-widest">
+                <a href="#" class="hover:text-primary transition-colors duration-300">Tribute</a>
+                <a href="#" class="hover:text-primary transition-colors duration-300">Privacy</a>
+                <a href="#" class="hover:text-primary transition-colors duration-300">Terms</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- Back to Top -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 rounded-full glass-panel flex items-center justify-center z-50 opacity-0 translate-y-10 pointer-events-none transition-all duration-500 hover:bg-primary/20 hover:border-primary/50 group">
+        <span class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors">arrow_upward</span>
+    </button>
+
+    <!-- GSAP & Plugins -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
